@@ -1,0 +1,129 @@
+﻿@model PagedList.IPagedList<MVCAssignment.Emplyoee>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+
+@{
+    ViewBag.Title = "Employee";
+    <style>
+        select, textarea {
+            /* max-width: 293px; */
+            width: 270px;
+            height: 34px;
+        }
+    </style>
+}
+
+<h2>Employees</h2>
+
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+
+    @using (Html.BeginForm("Index", "Emplyoee", FormMethod.Get))
+    {
+        <p>
+            Search Name: @Html.TextBox("Search_Data", ViewBag.FilterValue as string)
+            <button type="submit" value="Search" class="btn btn-success">Search</button>
+        </p>
+    }*@
+<div id="grpChkBox" class="d-flex">
+    @*<input type="checkbox" name="FirstName" /> FirstName
+        <input type="checkbox" name="LastName" /> LastName*@
+    @*<input type="checkbox" class="ShowHideColumn" data-columnindex="0" /> FirstName
+    <input type="checkbox" class="ShowHideColumn" data-columnindex="1"/> LastName*@
+</div>
+<div class="container-fluid create">
+    <div align="left" class="mt-3">
+        <button class="btn btn-success" onclick="location.href='@Url.Action("Create", "Emplyoee")';return false;">Create New</button>
+    </div>
+    <div align="right">
+        @using (Html.BeginForm("Index", "Emplyoee", FormMethod.Get))
+        {
+            <p>
+                Search Name: @Html.TextBox("Search_Data", ViewBag.FilterValue as string)
+                <button type="submit" value="Search" class="btn btn-success">Search</button>
+            </p>
+        }
+    </div>
+</div>
+
+<table class="table  table-bordered resizale-column" id="someTable">
+    <tr>
+        <th class="FirstName">
+            @Html.ActionLink("First Name", "Index", new { Sorting_Order = ViewBag.SortingName, Filter_Value = ViewBag.FilterValue })
+        </th>
+        <th class="LastName">
+            Last Name
+        </th>
+        <th>Email</th>
+        <th>
+            @Html.ActionLink("City", "Index", new { Sorting_Order = ViewBag.SortingDate, Filter_Value = ViewBag.FilterValue })
+        </th>
+        <th>Country</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EmailID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+
+    }
+
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, Page_No => Url.Action("Index",
+    new { Page_No, Sorting_Order = ViewBag.CurrentSortOrder, Filter_Value = ViewBag.FilterValue }))
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+@*<link href="//cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>*@
+    <script>
+        //$(function () {
+        //    var $chk = $("#grpChkBox input:checkbox");
+        //    var $tbl = $("#someTable");
+        //    var $tblhead = $("#someTable th");
+
+        //    $chk.prop('checked', true);
+
+        //    $chk.click(function () {
+        //        var colToHide = $tblhead.filter("." + $(this).attr("name"));
+        //        var index = $(colToHide).index();
+        //        $tbl.find('tr :nth-child(' + (index + 1) + ')').toggle();
+        //    });
+        //});
+        //$(document).ready(function () {
+        //    var table = $('#someTable').DataTable({
+        //        "scrollY": "200px",
+        //        "paging": false
+        //    });
+        //    $('.ShowHideColumn').on('click', function () {
+        //        var tableColumn = table.column($(this).attr('data-columnindex'));
+        //        tableColumn.visible(!tableColumn.visible());
+        //    });
+        //});
+    </script>

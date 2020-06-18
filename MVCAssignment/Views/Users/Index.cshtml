@@ -1,0 +1,73 @@
+﻿@model IEnumerable<MVCAssignment.User>
+
+@{
+    ViewBag.Title = "Index";
+    <style>
+        .emplyoee {
+            margin-top: 8% !important;
+        }
+        .create {
+            margin-top: 20px !important;
+            margin-bottom:20px !important;
+        }
+        a{
+            font-size:18px !important;
+        }
+
+        th{
+            font-size:19px !important;
+        }
+        td{
+            font-size:18px !important;
+        }
+    
+    </style>
+}
+
+<h2 class="emplyoee">User Details</h2>
+
+<p class="create">
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @if (User.IsInRole("admin"))
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                } |
+                @if (User.IsInRole("admin"))
+                {
+
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                }
+
+            </td>
+        </tr>
+    }
+
+</table>

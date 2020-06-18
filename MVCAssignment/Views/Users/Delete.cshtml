@@ -1,0 +1,28 @@
+﻿@model MVCAssignment.User
+
+@{
+    ViewBag.Title = "Delete";
+    <style>
+        .delete {
+            margin-top: 8% !important;
+        }
+        .btn-default{
+            background-color:red !important;
+        } 
+    </style>
+}
+
+<h2 class="delete">Delete</h2>
+
+<h3>Are You Sure You Want to Delete This ?</h3>
+<div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

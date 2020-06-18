@@ -1,0 +1,237 @@
+﻿@model IEnumerable<MVCAssignment.Emplyoee>
+
+@{
+    ViewBag.Title = "Index";
+    <style>
+        #txtEmployeeName {
+            width: 270px;
+            height: 34px;
+        }
+
+        .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+            margin-top: 50px !important
+        }
+
+        select, textarea {
+            /* max-width: 280px; */
+            width: 69px;
+            height: 32px;
+        }
+        input{
+            width:30px;
+        }
+        .ShowHideColumn {
+            height: 18px !important;
+            padding: 0px !important;
+        }
+
+        .option {
+            margin-top: 30px !important;
+            margin-bottom: 5px !important;
+        }
+
+        .resizer {
+            position: absolute;
+            top: 0;
+            right: -8px;
+            bottom: 0;
+            left: auto;
+            width: 16px;
+            cursor: col-resize;
+        }
+
+        div.dt-buttons {
+            position: relative;
+            float: left;
+            margin-top: 40px;
+            margin-left: 870px;
+            color: forestgreen !important;
+        }
+
+        button.dt-button, div.dt-button, a.dt-button {
+            background-color: #5cb85c !important;
+            background-image: none !important;
+        }
+
+        th, td {
+            white-space: nowrap;
+        }
+    </style>
+}
+<br />
+
+
+<h2>Employee Details</h2>
+<div class="container option">
+    <div class="row">
+        <div class="col-lg-4">
+            <button class="btn btn-success" onclick="location.href='@Url.Action("Create", "Employees")';return false;">Create New Employee</button>
+        </div>
+        <div class="col-lg-4">
+            <div class="button-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Show/Hide Column <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><input type="checkbox" class="ShowHideColumn" data-columnindex="1" />FirstName</li>
+                    <li><input type="checkbox" class="ShowHideColumn" data-columnindex="2" />LastName</li>
+                    <li><input type="checkbox" class="ShowHideColumn" data-columnindex="3" />Email-Id</li>
+                    <li><input type="checkbox" class="ShowHideColumn" data-columnindex="4" />City</li>
+                    <li><input type="checkbox" class="ShowHideColumn" data-columnindex="5" />Country</li>
+                    <li><input type="checkbox" class="ShowHideColumn" data-columnindex="6" />Edit</li>
+                    <li><input type="checkbox" class="ShowHideColumn" data-columnindex="7" />Delete</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <input type="text" id="txtEmployeeName" />
+            <button type="submit" value="Search" class="btn btn-success" id="btnSearch">Search</button>
+        </div>
+    </div>
+</div>
+@* jQuery DataTables *@
+<div>
+    <table id="myTable" class="table table-responsive table-bordered">
+        <thead>
+            <tr>
+                <th></th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Email</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+<link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/responsive/2.2.5/css/responsive.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/colreorder/1.5.2/css/colReorder.dataTables.min.css" rel="stylesheet" />
+
+
+@section Scripts{
+    @*<script src="~/Scripts/jquery-3.4.1.js"></script>*@
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>   
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery-datatables-checkboxes@1.2.11/js/dataTables.checkboxes.min.js"></script>
+    <script src="~/Scripts/jquery-resizable.js"></script>
+    <script src="~/Scripts/jquery-resizableTableColumns.js"></script>
+    <script>
+        $(document).ready(function () {
+            //jQuery DataTables initialization
+            var oTable = $('#myTable').DataTable({
+                dom: 'lBrtip',
+                buttons: [
+                    {
+                        extend: 'csv',
+                        text: 'Export to CSV'
+                    }
+                ],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        checkboxes: {
+                            selectRow:true                      
+                        }
+                    }
+                ],
+                responsive: true,
+                colReorder: true,	
+                select: {
+                    style : 'multi'
+                },
+                order : [[1,'asc']],
+                "aLengthMenu": [[5, 10, 15], [5, 10, 15]],
+                "bStateSave": true,
+                "processing": true, // for show processing bar
+                "serverSide": true, // for process on server side
+                "orderMulti": false,// for disable multi column order
+                //"scrollY": 300,
+                //"scrollX": true,
+                //scrollCollapse: true,
+                //fixedColumns: {
+                //    rightColumns: 2
+                //},
+               /* "dom": '<"top"i>rt<"bottom"lp><"clear">',*/ // for hide default global search box // little confusion? don't worry I explained in the tutorial website
+                "ajax": {
+                    "url": "/Employees/LoadData",
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columns": [    
+                    {"data": null, defaultContent: '' },
+                    { "data": "FirstName", "name": "FirstName", "autoWidth": true }, //index 0
+                    { "data": "LastName", "name": "LastName", "autoWidth": true }, //index 1
+                    { "data": "EmailID", "name": "EmailID", "autoWidth": true },             //index 2
+                    { "data": "City", "name": "City", "autoWidth": true },      //index 3
+                    { "data": "Country", "name": "Country", "autoWidth": true },//index 4
+                    {
+                        "title": "Edit",
+                        "data": "Id",
+                        "searchable": false,
+                        "sortable": false,
+                        "render": function (data, type, full, meta) {
+                            return '<a href="@Url.Action("Edit","Employees")?id=' + data + '" class="editAsset">Edit</a>';
+                        }
+                    },
+                      {
+                        "title": "Delete",
+                        "data": "Id",
+                        "searchable": false,
+                        "sortable": false,
+                        "render": function (data, type, full, meta) {
+                            return '<a href="@Url.Action("Delete","Employees")?id=' + data + '" class="editAsset">Delete</a>';
+                        }
+                    }
+                ],
+            });
+            //Apply Custom search on jQuery DataTables here
+            //var oTable = $('#myTable').dataTable();
+            $('#btnSearch').click(function () {
+                //Apply search for Employee Name // DataTable column index 0
+                oTable.columns(0).search($('#txtEmployeeName').val().trim());
+                //hit search on server
+                oTable.draw();
+            });
+            $('.ShowHideColumn').prop('checked', true);
+            $('.ShowHideColumn').on('click', function () {
+                var tableColumn = oTable.column($(this).attr('data-columnindex'));
+                tableColumn.visible(!tableColumn.visible());
+            });
+        });
+
+        //$("td,th").resizableTableColumns();
+
+        $("td:first-child,td:nth-child(1),td:nth-child(2)").resizableTableColumns();
+
+        $("td,th")
+            //$("td:first-child,td:nth-child(2),td:nth-child(3)")
+            .css({ position: "relative" })
+            .prepend("<div class='resizer'></div>")
+            .resizable({
+                resizeHeight: false,
+                // we use the column as handle and filter
+                // by the contained .resizer element
+                handleSelector: "",
+                onDragStart: function (e, $el, opt) {
+                    // only drag resizer
+                    if (!$(e.target).hasClass("resizer"))
+                        return false;
+                    return true;
+                }
+
+            });
+    </script>
+}
+
